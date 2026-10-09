@@ -31,7 +31,10 @@ app.get('/api/extract', async (req, res) => {
     let extractedUrl = null;
 
     $('iframe, source, script').each((i, el) => {
-      const src = $(el).attr('src') \vert{}\vert{}$(el).html();
+      const attrSrc = $(el).attr('src');
+      const htmlContent = $(el).html();
+      const src = attrSrc ? attrSrc : htmlContent;
+
       if (src && (src.includes('.m3u8') || src.includes('.mp4'))) {
         const match = src.match(/(https?:\/\/[^\s"'<]+(\.m3u8|\.mp4))/i);
         if (match && !extractedUrl) {
