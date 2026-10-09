@@ -12,7 +12,6 @@ const HEADERS = {
   'Accept': '*/*'
 };
 
-// ROTA DE VERIFICAÇÃO DE MÍDIA LIMPA
 app.get('/api/extract', async (req, res) => {
   const { type, id } = req.query;
 
@@ -25,14 +24,12 @@ app.get('/api/extract', async (req, res) => {
       ? `https://embed.warezcdn.com/serie/${id}/1/1`
       : `https://embed.warezcdn.com/filme/${id}`;
 
-    // 1. Faz o download do HTML do player
     const response = await axios.get(embedUrl, { headers: HEADERS, timeout: 10000 });
     const html = response.data;
     const $ = cheerio.load(html);
 
     let extractedUrl = null;
 
-    // 2. Procura por links de transmissão .m3u8 ou .mp4 no HTML
     $('iframe, source, script').each((i, el) => {
       const src = $(el).attr('src') \vert{}\vert{}$(el).html();
       if (src && (src.includes('.m3u8') || src.includes('.mp4'))) {
@@ -43,7 +40,6 @@ app.get('/api/extract', async (req, res) => {
       }
     });
 
-    // 3. Validação estrita: se encontrou a URL, testa se o vídeo responde 200 OK
     if (extractedUrl) {
       try {
         const check = await axios.head(extractedUrl, { headers: HEADERS, timeout: 5000 });
@@ -62,7 +58,6 @@ app.get('/api/extract', async (req, res) => {
       }
     }
 
-    // Se não encontrou ou não respondeu 200 OK, recusa a abertura
     return res.json({ 
       success: false, 
       message: 'Vídeo limpo sem anúncios indisponível no momento para este título.' 
