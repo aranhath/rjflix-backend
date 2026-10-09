@@ -16,7 +16,7 @@ app.get('/api/extract', async (req, res) => {
   const { type, id } = req.query;
 
   if (!id) {
-    return res.status(400).json({ success: false, error: 'ID do TMDB não fornecido.' });
+    return res.status(400).json({ success: false, error: 'ID do TMDB nao fornecido.' });
   }
 
   try {
@@ -53,20 +53,20 @@ app.get('/api/extract', async (req, res) => {
             return res.json({ success: true, streamUrl: extractedUrl });
           }
         } catch (e) {
-          console.log('Falha na validação do stream direto.');
+          console.log('Falha na validacao.');
         }
       }
     }
 
     return res.json({ 
       success: false, 
-      message: 'Vídeo limpo sem anúncios indisponível no momento para este título.' 
+      message: 'Video limpo indisponivel no momento.' 
     });
 
   } catch (error) {
     return res.json({ 
       success: false, 
-      error: 'Falha ao processar o filme.',
+      error: 'Falha ao processar.',
       message: error.message 
     });
   }
@@ -74,7 +74,7 @@ app.get('/api/extract', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor Verificador a rodar na porta ${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
 
 module.exports = app;
